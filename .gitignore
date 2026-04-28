@@ -1,0 +1,48 @@
+# Adat — Drive-on él, nem a repóban
+data/
+*.csv
+*.parquet
+*.feather
+
+# Modellek és cache
+models/
+*.pkl
+*.joblib
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Eredmények —  a results/metrics.csv-t commitoljuk!
+# A figures-t is, hogy a riportba átemelhető legyen
+# results/figures/*.png  # ha mégis ki akarjuk zárni
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Environment
+.env
+.env.local
