@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from .config import DATA_VERSION, RANDOM_SEED, SAMPLE_SIZE, SPLITS_DIR, TARGET_COLUMN
+from config import DATA_VERSION, RANDOM_SEED, SAMPLE_SIZE, SPLITS_DIR, TARGET_COLUMN
 
 
 def load_train_test(
