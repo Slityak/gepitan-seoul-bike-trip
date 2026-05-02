@@ -12,11 +12,10 @@ from config import SPLITS_DIR
 X_train, X_test, y_train, y_test = load_train_test()
 
 
-# --- 1. LÉPÉS: TISZTÍTÁS (Ezt a Pipeline előtt érdemes, mert sorokat töröl) ---
+# --- 1. LÉPÉS: TISZTÍTÁS
 def clean_data_logic(X, y):
     df = X.copy()
     df['target'] = y
-    # Outlier szűrés a projektterv szerint
     df = df[(df['target'] >= 1) & (df['target'] <= 180)]
     df = df[df['Distance'] >= 10]
     return df.drop(columns=['target']), df['target']
@@ -29,31 +28,25 @@ X_test, y_test = clean_data_logic(X_test, y_test)
 # --- 2. LÉPÉS: FEATURE ENGINEERING FÜGGVÉNY ---
 def feature_engineering_transform(df):
     df = df.copy()
-    # Redundancia szűrése
+
     if 'GroundTemp' in df.columns:
         df = df.drop(columns=['GroundTemp'])
 
-    # Új jellemzők gyártása[cite: 1]
     df['manhattan_dist'] = (df['PLatd'] - df['DLatd']).abs() + (df['PLong'] - df['DLong']).abs()
     df['route_directness'] = df['Distance'] / (df['Haversine'] * 1000 + 1e-6)
 
-    # Ciklikus kódolás[cite: 1]
     df['hour_sin'] = np.sin(2 * np.pi * df['Phour'] / 24)
     df['hour_cos'] = np.cos(2 * np.pi * df['Phour'] / 24)
 
-    # Bináris jellemzők[cite: 1]
     df['is_rush_hour'] = df['Phour'].apply(lambda x: 1 if x in [7, 8, 9, 17, 18, 19] else 0)
     df['is_weekend'] = df['PDweek'].apply(lambda x: 1 if x >= 5 else 0)
 
-    # Kategorikus kódolás (One-Hot)[cite: 1]
     df = pd.get_dummies(df, columns=['PDweek'], prefix='day')
 
-    # Biztosítjuk, hogy minden oszlop megvan (align)
     return df
 
 
 # --- 3. LÉPÉS: A PIPELINE ÖSSZEÁLLÍTÁSA ---
-# Ez az a rész, ami hiányzott a "formai 5-öshöz"
 data_pipeline = Pipeline([
     ('feature_eng', FunctionTransformer(feature_engineering_transform)),
     ('scaler', StandardScaler())
