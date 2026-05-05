@@ -35,13 +35,20 @@ def get_data_dir() -> Path:
     return get_project_root() / "data"
 
 
+def get_outputs_root() -> Path:
+    """Modellek és eredmények gyökere. Colabon Drive-on lokálisan a repo gyökerében."""
+    if IN_COLAB:
+        return Path("/content/drive/MyDrive/GepiTan_Beadando")
+    return get_project_root()
+
+
 # Származtatott path-ok
 PROJECT_ROOT: Path = get_project_root()
 DATA_DIR: Path = get_data_dir()
 SPLITS_DIR: Path = DATA_DIR / "splits"
 PROCESSED_DIR: Path = DATA_DIR / "processed"
-MODELS_DIR: Path = PROJECT_ROOT / "models"
-RESULTS_DIR: Path = PROJECT_ROOT / "results"
+MODELS_DIR: Path = get_outputs_root() / "models"
+RESULTS_DIR: Path = get_outputs_root() / "results"
 FIGURES_DIR: Path = RESULTS_DIR / "figures"
 METRICS_CSV: Path = RESULTS_DIR / "metrics.csv"
 
