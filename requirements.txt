@@ -6,3 +6,4 @@ matplotlib
 seaborn
 pyarrow
 fastparquet
+kagglehub

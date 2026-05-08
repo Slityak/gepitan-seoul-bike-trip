@@ -24,8 +24,9 @@ FEATURE_NAMES: list[str] = [
 def load_v1_data(
     sample_size: int | None = None,
     random_state: int = RANDOM_SEED,
+    version: str = DATA_VERSION,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list[str]]:
-    """Betölti a v1 final pipeline kimenetét (X_*_final.npy + y_*_final.csv).
+    """Betölti a final pipeline kimenetét (X_*_{version}.npy + y_*_{version}.csv).
 
     A fájlokat a DATA_DIR-ben keresi, illetve fallback-ként a DATA_DIR/splits-ben.
 
@@ -33,6 +34,7 @@ def load_v1_data(
         sample_size: ha nem None, ennyi sort vesz a train-ből, és sample_size//4-et
             a test-ből.
         random_state: a sample-eléshez.
+        version: "v0" (sample) vagy "v1" (teljes adat). Default a config DATA_VERSION.
 
     Returns:
         (X_train, X_test, y_train, y_test, feature_names)
@@ -43,13 +45,14 @@ def load_v1_data(
             if p.exists():
                 return p
         raise FileNotFoundError(
-            f"{name} sehol nincs (próbáltam: {DATA_DIR} és {DATA_DIR}/splits)."
+            f"{name} sehol nincs (próbáltam: {DATA_DIR} és {DATA_DIR}/splits). "
+            f"Futtasd a src/geostat_elemzes.py-t DATA_VERSION='{version}'-vel."
         )
 
-    X_train = np.load(_find("X_train_final.npy"))
-    X_test = np.load(_find("X_test_final.npy"))
-    y_train = pd.read_csv(_find("y_train_final.csv")).iloc[:, 0].to_numpy()
-    y_test = pd.read_csv(_find("y_test_final.csv")).iloc[:, 0].to_numpy()
+    X_train = np.load(_find(f"X_train_{version}.npy"))
+    X_test = np.load(_find(f"X_test_{version}.npy"))
+    y_train = pd.read_csv(_find(f"y_train_{version}.csv")).iloc[:, 0].to_numpy()
+    y_test = pd.read_csv(_find(f"y_test_{version}.csv")).iloc[:, 0].to_numpy()
 
     if X_train.shape[1] != len(FEATURE_NAMES):
         raise ValueError(

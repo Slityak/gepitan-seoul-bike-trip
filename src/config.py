@@ -53,7 +53,10 @@ FIGURES_DIR: Path = RESULTS_DIR / "figures"
 METRICS_CSV: Path = RESULTS_DIR / "metrics.csv"
 
 # Adat-verzió kapcsoló — a notebookok ezt használják
-# Lehet: "v0" (200k sample, sanity check) vagy "v1" (teljes adat, feature engineered)
+# Lehet:
+#   "v0"   – 200k sample (gyors fejlesztés, sanity check)
+#   "vKNN" – 500k sample (KNN-bejárható méret, geostat KNN fit ezen fut)
+#   "v1"   – teljes 9.6M sor (final tanításhoz, KNN-fit nélkül)
 DATA_VERSION: str = "v0"
 
 # Subsample fejlesztéshez (None = teljes adat a kiválasztott verzióból)
