@@ -24,9 +24,11 @@ ENV/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Eredmények —  a results/metrics.csv-t commitoljuk!
-# A figures-t is, hogy a riportba átemelhető legyen
-# results/figures/*.png  # ha mégis ki akarjuk zárni
+# Eredmények — Colabon Drive-ra mennek, lokálisan tesztfutásokból maradnak
+results/figures/*.png
+results/figures/*.jpg
+results/figures/*.svg
+results/figures/*.pdf
 
 # IDE
 .vscode/
