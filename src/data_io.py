@@ -2,23 +2,13 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 from .config import DATA_DIR, DATA_VERSION, RANDOM_SEED, SAMPLE_SIZE, SPLITS_DIR, TARGET_COLUMN
-
-
-# A v1 final pipeline oszlopainak nevei sorrendben (a npy nem hordoz oszlopneveket).
-FEATURE_NAMES: list[str] = [
-    "Unnamed: 0", "Distance", "PLong", "PLatd", "DLong", "DLatd", "Haversine",
-    "Pmonth", "Pday", "Phour", "Pmin",
-    "Temp", "Precip", "Wind", "Humid", "Solar", "Snow", "Dust",
-    "manhattan_dist", "route_directness", "hour_sin", "hour_cos",
-    "is_rush_hour", "is_weekend",
-    "day_0", "day_1", "day_2", "day_3", "day_4", "day_5", "day_6",
-]
 
 
 def load_v1_data(
@@ -54,13 +44,15 @@ def load_v1_data(
     y_train = pd.read_csv(_find(f"y_train_{version}.csv")).iloc[:, 0].to_numpy()
     y_test = pd.read_csv(_find(f"y_test_{version}.csv")).iloc[:, 0].to_numpy()
 
-    if X_train.shape[1] != len(FEATURE_NAMES):
+    with open(_find(f"feature_names_{version}.json"), encoding="utf-8") as fh:
+        feature_names = json.load(fh)
+
+    if X_train.shape[1] != len(feature_names):
         raise ValueError(
             f"X_train oszlopszám ({X_train.shape[1]}) nem egyezik a "
-            f"FEATURE_NAMES méretével ({len(FEATURE_NAMES)})."
+            f"feature-lista méretével ({len(feature_names)}). "
+            f"Generáld újra a verziót: python -m src.geostat_elemzes --version {version}"
         )
-
-    feature_names = list(FEATURE_NAMES)
 
     if sample_size is not None:
         rng = np.random.default_rng(random_state)
