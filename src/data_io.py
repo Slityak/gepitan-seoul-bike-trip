@@ -11,13 +11,17 @@ from .config import DATA_DIR, DATA_VERSION, RANDOM_SEED, SAMPLE_SIZE, SPLITS_DIR
 
 
 # A v1 final pipeline oszlopainak nevei sorrendben (a npy nem hordoz oszlopneveket).
+# A `data_pipeline_final.joblib` (geostat_elemzes.feature_engineering_transform +
+# VarianceThreshold) determinisztikus kimenete, 36 oszlop.
 FEATURE_NAMES: list[str] = [
-    "Unnamed: 0", "Distance", "PLong", "PLatd", "DLong", "DLatd", "Haversine",
-    "Pmonth", "Pday", "Phour", "Pmin",
+    "Unnamed: 0", "PLong", "PLatd", "DLong", "DLatd", "Haversine",
+    "Pmonth", "Pday", "Phour",
     "Temp", "Precip", "Wind", "Humid", "Solar", "Snow", "Dust",
-    "manhattan_dist", "route_directness", "hour_sin", "hour_cos",
+    "manhattan_dist", "is_same_station",
+    "hour_sin", "hour_cos", "month_sin", "month_cos",
     "is_rush_hour", "is_weekend",
     "day_0", "day_1", "day_2", "day_3", "day_4", "day_5", "day_6",
+    "tod_night", "tod_morning", "tod_afternoon", "tod_evening", "tod_late",
 ]
 
 
